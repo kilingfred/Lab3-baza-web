@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="lab3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="form">
+        <div class="name">
+            <h3>Name</h3><input onchange="check()" id="name" type="text">
+        </div>
+        <div class="surname">
+            <h3>Surname</h3><input onchange="check()" id="surname" type="text">
+        </div>
+        <div class="form-column">
+            <div class="form-column-item">
+                <div class="address">
+                    <h3>Address</h3><input onchange="check()" id="address" type="text">
+                </div>
+                <div class="city">
+                    <h3>City</h3><input onchange="check()" id="text" name="" id="city">
+                </div>
+            </div>
+            <div class="form-column-item">
+                <div class="country">
+                    <h3>Country</h3><input type="text" id="country" onchange="check()">
+                </div>
+                <div class="post">
+                    <h3>Post</h3><input type="text" id="post" onchange="check()">
+                </div>
+            </div>
+        </div>
+        <div class="mail">
+            <h3>Mail</h3><input onchange="check()" id="mail" type="text">
+        </div>
+    </div>
+    <div class="textfield">
+        <input id="split" type="text">
+        <button onclick="split()">OK</button>
+    </div>
+    <div class="square">
+        <img src="./lab3.jpg" class="square-item" onmouseover="stop()" onmouseout="start()">
+    </div>
+    <script>
+        function dontIncludeNumbers(element, divElement) {
+            for (let i = 0; i < element.value.length; i++) {
+                if (divElement.childElementCount > 2) { divElement.lastChild.remove() };
+                if (element.value.includes(Number.parseInt(element.value.charAt(i)))) {
+                    let cp = document.createElement('p');
+                    cp.innerHTML = "Don't include numbers";
+                    divElement.appendChild(cp);
+                    break;
+                }
+            }
+        }
+        function check() {
+            let divname = document.querySelector(".name");
+            let divsurname = document.querySelector(".surname");
+            let divaddress = document.querySelector(".address");
+            let divcountry = document.querySelector(".country");
+            let divcity = document.querySelector(".city");
+            let divpost = document.querySelector(".post");
+            let divmail = document.querySelector(".mail");
+            let cname = document.querySelector("#name");
+            let csurname = document.querySelector("#surname");
+            let ccountry = document.querySelector("#country");
+            let cpost = document.querySelector("#post");
+            let cmail = document.querySelector("#mail");
+
+
+            dontIncludeNumbers(cname, divname);
+            dontIncludeNumbers(csurname, divsurname);
+            for (let i = 0; i < cpost.value.length; i++) {
+                if (divpost.childElementCount > 2) { divpost.lastChild.remove() };
+                if (!cpost.value.includes(Number.parseInt(cpost.value)) || cpost.value.length < 5) {
+                    let cp = document.createElement('p');
+                    cp.innerHTML = "Include only or more numbers";
+                    divpost.appendChild(cp);
+                    break;
+                }
+                if (cpost.value.length > 5) {
+                    let cp = document.createElement('p');
+                    cp.innerHTML = "Include less numbers";
+                    divpost.appendChild(cp);
+                    break;
+                }
+            }
+            for (let i = 0; i < cmail.value.length; i++) {
+                if (divmail.childElementCount > 2) { divmail.lastChild.remove() };
+                if (!cmail.value.includes('@')) {
+                    let cp = document.createElement('p');
+                    cp.innerHTML = "Include '@'";
+                    divmail.appendChild(cp);
+                    break;
+                }
+            }
+            dontIncludeNumbers(ccountry, divcountry);
+        };
+        function split() {
+            let array = [];
+            let string = document.getElementById("split").value;
+            for (let i = 0; i < string.length; i++) {
+                if (i + 1 >= string.length) { array.push(string.charAt(i) + "_"); break; }
+                array.push(string.charAt(i) + string.charAt(i + 1));
+                i++;
+            }
+            let field = document.querySelector(".textfield");
+            while (field.childElementCount != 2) field.lastChild.remove();
+            for (let i = 0; i < array.length; i++) {
+                let ul = document.createElement("ul");
+                ul.innerHTML = array[i];
+                //document.body.appendChild(ul);
+                field.appendChild(ul);
+            }
+            return;
+        }
+        let xDirection = 1;
+        let yDirection = 1;
+        let mobility = 1;
+        let square = document.querySelector(".square");
+        let square_item = document.querySelector(".square-item");
+        let coord = square.getBoundingClientRect();
+        let g = square_item.getBoundingClientRect();
+        console.log(coord.top);
+        console.log(coord.left);
+        square_item.style.top = coord.top + 20 + "px";
+        square_item.style.left = coord.left + 20 + "px";
+        function move() {
+            setInterval(() => {
+                coord = square.getBoundingClientRect();
+                if (mobility == 0) return;
+                if (xDirection == 1) {
+                    g.x += 2;
+                }
+                if (xDirection == 0) {
+                    g.x -= 2;
+                }
+                if (yDirection == 1) {
+                    g.y += 2;
+                }
+                if (yDirection == 0) {
+                    g.y -= 2;
+                }
+
+                if (parseInt(coord.bottom) <= parseInt(square_item.style.bottom))
+                    yDirection = 0;
+                if (parseInt(coord.top) >= parseInt(square_item.style.top))
+                    yDirection = 1;
+                if (parseInt(coord.right) <= parseInt(square_item.style.right)) {
+                    xDirection = 0;
+                }
+                if (parseInt(coord.left) >= parseInt(square_item.style.left))
+                    xDirection = 1;
+                square_item.style.left = g.x + "px";
+                square_item.style.top = g.y + "px";
+                square_item.style.bottom = g.y + "px";
+                square_item.style.right = g.x + "px";
+            }, 10);
+        }
+        move();
+        function start() {
+            mobility = 1;
+            return;
+        }
+        function stop() {
+            mobility = 0;
+            return;
+        }
+    </script>
+</body>
+
+</html>

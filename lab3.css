@@ -1,0 +1,23 @@
+.form {
+    background-color: lightgreen;
+}
+.form-column {
+    display: flex;
+    
+}
+.textfield {
+    background-color: lightblue;
+}
+.square {
+    display: block;
+    height: 30vh;
+    position:static;
+    background-color: red;
+}
+.square-item {
+    display: flex;
+    width: 40px;
+    height: 20px;
+    background-color: red;
+    position: absolute;
+}
